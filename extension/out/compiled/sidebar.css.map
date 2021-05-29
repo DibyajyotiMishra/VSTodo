@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "file": "sidebar.css",
+  "sources": [
+    "Sidebar.svelte"
+  ],
+  "sourcesContent": [
+    "<script lang=\"ts\">import { onMount } from \"svelte\";\nlet todos = [];\nlet text = \"\";\nonMount(() => {\n    window.addEventListener(\"message\", event => {\n        const message = event.data; // The json data that the extension sent\n        console.log(message);\n        switch (message.type) {\n            case \"new-todo\":\n                todos = [{ text: message.value, completed: false }, ...todos];\n                break;\n        }\n    });\n});\n</script>\n\n<div>\n  <form\n    on:submit|preventDefault={() => {\n      todos = [{ text, completed: false }, ...todos];\n      text = \"\";\n    }}\n  >\n    <input type=\"text\" bind:value={text} />\n  </form>\n</div>\n\n<ul>\n  {#each todos as todo (todo.text)}\n    <li\n      class:complete={todo.completed}\n      on:click={() => {\n        todo.completed = !todo.completed;\n      }}\n    >\n      {todo.text}\n    </li>\n  {/each}\n</ul>\n\n<button\n  on:click={() => {\n    tsvscode.postMessage({\n      type: \"onInfo\",\n      value: \"Test Info Message\",\n    });\n  }}\n>\n  Click for Info Message\n</button>\n\n<button\n  on:click={() => {\n    tsvscode.postMessage({\n      type: \"onError\",\n      value: \"Test Error Message\",\n    });\n  }}\n>\n  Click for Error Message\n</button>\n\n<style>\n  div {\n    color: palevioletred;\n  }\n  .complete {\n    text-decoration: line-through;\n  }\n</style>\n"
+  ],
+  "names": [],
+  "mappings": "AA+DE,GAAG,cAAC,CAAC,AACH,KAAK,CAAE,aAAa,AACtB,CAAC,AACD,SAAS,cAAC,CAAC,AACT,eAAe,CAAE,YAAY,AAC/B,CAAC"
+}
